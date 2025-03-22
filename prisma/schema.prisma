@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider   = "prisma-client-js"
+  engineType = "binary"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Products {
+  id           String         @id @default(uuid(7)) @db.Uuid
+  name         String         @unique(map: "UQ_PRODUCT_NAME")
+  price        Decimal?       @default(20.00) @db.Decimal(10, 2)
+  OrderDetails OrderDetails[]
+}
+
+model Order {
+  id        String         @id @default(uuid(7)) @db.Uuid
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  deletedAt DateTime?
+  hasCoca   Boolean        @default(false)
+  dinerID   String         @db.Uuid
+  diner     Diner          @relation(fields: [dinerID], references: [id])
+  eventID   String         @db.Uuid
+  event     Event          @relation(fields: [eventID], references: [id])
+  details   OrderDetails[]
+}
+
+model OrderDetails {
+  id        String   @id @default(uuid(7)) @db.Uuid
+  quantity  Int
+  productID String   @db.Uuid
+  orderID   String   @db.Uuid
+  product   Products @relation(fields: [productID], references: [id])
+  order     Order    @relation(fields: [orderID], references: [id])
+}
+
+model Event {
+  id          String   @id @default(uuid(7)) @db.Uuid
+  name        String
+  date        DateTime @db.Date
+  location    String
+  description String
+  orders      Order[]
+}
+
+model Diner {
+  id     String  @id @default(uuid(7)) @db.Uuid
+  name   String  @unique(map: "UQ_DINER_NAME")
+  orders Order[]
+}
