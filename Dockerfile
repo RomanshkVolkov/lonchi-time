@@ -6,9 +6,8 @@ RUN apk add --no-cache libc6-compat build-base python3
 WORKDIR /app
 
 # Install dependencies based on the preferred package manager
-COPY package.json pnpm-lock.yaml* ./
-RUN echo 'public-hoist-pattern[]=*@nextui-org/*' > .npmrc
-RUN corepack enable pnpm && pnpm i --frozen-lockfile
+COPY package.json ./
+RUN npm i --ignore-scripts
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -16,7 +15,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-RUN corepack enable pnpm && pnpm build
+RUN npx prisma generate && npm run build
 
 # Production image, copy all the files and run next
 FROM base AS runner
