@@ -4,13 +4,13 @@ import { getDinnersForInput } from '@/libs/services/diners';
 import { getProductsForCreateOrder } from '@/libs/services/products';
 
 export default async function AppendOrderModal() {
-   const [diners, products] = await Promise.all([
-      getDinnersForInput(),
-      getProductsForCreateOrder(),
-   ]);
-   return (
-      <ModalWrapper header="Agregar orden" isIntercepted>
-         <FormAppendOrder diners={diners} products={products} />
-      </ModalWrapper>
-   );
+  const [diners, products] = await Promise.all([
+    getDinnersForInput(),
+    getProductsForCreateOrder(),
+  ]);
+  return (
+    <ModalWrapper header="Agregar orden" isIntercepted>
+      <FormAppendOrder diners={diners} products={products} />
+    </ModalWrapper>
+  );
 }

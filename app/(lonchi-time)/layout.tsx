@@ -1,11 +1,11 @@
 export default function Layout({
-   children,
-   modals,
+  children,
+  modals,
 }: Record<'children' | 'modals', React.ReactNode>) {
-   return (
-      <>
-         {children}
-         {modals}
-      </>
-   );
+  return (
+    <>
+      {children}
+      {modals}
+    </>
+  );
 }

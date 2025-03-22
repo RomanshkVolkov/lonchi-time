@@ -1,40 +1,43 @@
 {
-   "name": "salbutes",
-   "version": "0.1.0",
-   "private": true,
-   "prisma": {
-      "seed": "npx tsx prisma/seeds/main.ts"
-   },
-   "scripts": {
-      "dev": "op run --env-file='./.env' -- next dev --turbopack",
-      "build": "next build",
-      "start": "next start",
-      "lint": "next lint",
-      "prisma:seed": "op run --env-file='./.env' -- npx prisma db seed",
-      "prisma:create": "op run --env-file='./.env' -- npx prisma db push",
-      "prisma:reset": "op run --env-file='./.env' -- npx prisma migrate reset",
-      "prisma:migrate": "op run --env-file='./.env' -- npx prisma migrate dev"
-   },
-   "dependencies": {
-      "@heroicons/react": "^2.2.0",
-      "@heroui/react": "^2.7.5",
-      "@prisma/client": "^6.5.0",
-      "jotai": "^2.12.2",
-      "next": "15.2.3",
-      "prettier-plugin-tailwindcss": "^0.6.11",
-      "react": "^19.0.0",
-      "react-dom": "^19.0.0"
-   },
-   "devDependencies": {
-      "@eslint/eslintrc": "^3.3.0",
-      "@types/node": "^22.13.10",
-      "@types/react": "^19.0.11",
-      "@types/react-dom": "^19.0.4",
-      "eslint": "^9.22.0",
-      "eslint-config-next": "15.2.3",
-      "eslint-config-prettier": "^10.1.1",
-      "postcss": "^8.5.3",
-      "tailwindcss": "^3.4.1",
-      "typescript": "^5.8.2"
-   }
+  "name": "salbutes",
+  "version": "0.1.0",
+  "private": true,
+  "prisma": {
+    "seed": "npx tsx prisma/seeds/main.ts"
+  },
+  "scripts": {
+    "dev": "op run --env-file='./.env' -- next dev --turbopack",
+    "build": "next build",
+    "build:op": "op run --env-file='./.env' -- next build",
+    "start": "next start",
+    "lint": "next lint",
+    "prisma:seed": "op run --env-file='./.env' -- npx prisma db seed",
+    "prisma:create": "op run --env-file='./.env' -- npx prisma db push",
+    "prisma:reset": "op run --env-file='./.env' -- npx prisma migrate reset",
+    "prisma:migrate": "op run --env-file='./.env' -- npx prisma migrate dev"
+  },
+  "dependencies": {
+    "@heroicons/react": "^2.2.0",
+    "@heroui/react": "^2.7.5",
+    "@prisma/client": "^6.5.0",
+    "jotai": "^2.12.2",
+    "next": "15.2.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.0",
+    "@next/eslint-plugin-next": "^15.2.0",
+    "@types/node": "^22.13.10",
+    "@types/react": "^19.0.11",
+    "@types/react-dom": "^19.0.4",
+    "eslint": "^9.22.0",
+    "eslint-config-next": "15.2.0",
+    "eslint-config-prettier": "^10.0.2",
+    "postcss": "^8.5.3",
+    "prettier": "^3.5.2",
+    "prettier-plugin-tailwindcss": "^0.6.11",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.8.2"
+  }
 }
