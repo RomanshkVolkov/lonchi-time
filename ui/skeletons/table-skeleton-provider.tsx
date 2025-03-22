@@ -1,10 +1,12 @@
 import { Suspense } from 'react';
-import TableSkeleton from '@/app/ui/skeletons/table-skeleton';
+import TableSkeleton from '@/ui/skeletons/table-skeleton';
 
 export default function TableSkeletonProvider({
-  children,
+   children,
+   skeleton = <TableSkeleton />,
 }: {
-  children: React.ReactNode;
+   children: React.ReactNode;
+   skeleton?: React.ReactNode;
 }) {
-  return <Suspense fallback={<TableSkeleton />}>{children}</Suspense>;
+   return <Suspense fallback={skeleton}>{children}</Suspense>;
 }
