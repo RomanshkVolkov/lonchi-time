@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} h-screen w-screen bg-slate-300 px-20 py-10 antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} h-screen w-screen bg-slate-300 px-5 py-5 antialiased md:px-20 md:py-20`}
       >
         <TableSkeletonProvider>
           <Providers>{children}</Providers>
