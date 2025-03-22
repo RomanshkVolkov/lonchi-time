@@ -1,13 +1,9 @@
-import prisma from '@/prisma/db';
+import { getEventsDataTable } from '@/libs/services/events';
 import MainWrapper from '@/ui/layout/main-wrapper';
 import OrderTable from '@/ui/tables/order-table';
 
 export default async function Home() {
-  const data = await prisma.event.findMany({
-    orderBy: {
-      date: 'desc',
-    },
-  });
+  const data = await getEventsDataTable();
   return (
     <MainWrapper
       headSectionH1Props={{
