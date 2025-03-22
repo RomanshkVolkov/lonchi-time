@@ -7,6 +7,7 @@ declare -A params=(
   [IMAGE]=""
   [CADDY_HOST]=""
   [CADDY_TLS]=""
+  [DEPLOY_DB_URL]=""
   ## add more envs here same on the debug.sh
 )
 
