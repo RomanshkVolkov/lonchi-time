@@ -15,7 +15,13 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+ARG DB_URL
+ENV DATABASE_URL=$DB_URL
+
 RUN npx prisma generate && npm run build
+
+ENV NODE_ENV=production
+ENV DATABASE_URL="hide"
 
 # Production image, copy all the files and run next
 FROM base AS runner
