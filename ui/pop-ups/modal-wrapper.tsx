@@ -20,6 +20,7 @@ type Props = {
   header: React.ReactNode;
   children: React.ReactNode;
   footer?: React.ReactNode;
+  hideFooter?: boolean;
   isIntercepted?: boolean;
 };
 export default function ModalWrapper({
@@ -28,6 +29,7 @@ export default function ModalWrapper({
   modalProps,
   children,
   footer,
+  hideFooter,
   isIntercepted,
 }: Props) {
   const { back } = useRouter();
@@ -53,17 +55,13 @@ export default function ModalWrapper({
                 {header}
               </ModalHeader>
               <ModalBody>{children}</ModalBody>
-              <ModalFooter>
-                {footer ?? (
-                  <Button
-                    color="danger"
-                    variant="light"
-                    onPress={isIntercepted ? back : onClose}
-                  >
+              {!hideFooter ? null : (
+                <ModalFooter>
+                  <Button color="danger" variant="light" onPress={onClose}>
                     Cerrar
                   </Button>
-                )}
-              </ModalFooter>
+                </ModalFooter>
+              )}
             </>
           )}
         </ModalContent>

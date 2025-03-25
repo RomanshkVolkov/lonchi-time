@@ -4,12 +4,14 @@ import prisma from '@/prisma/db';
 import { OrderAtomTypes } from '../atoms/order';
 import { serializePrice } from '../serializers/common';
 import { EventRecordTypes } from '@/types/event';
+import { NO_LOGIC_DELETED_AT } from '@/prisma/queries';
 
 export async function getEventsDataTable() {
   return await prisma.event.findMany({
     orderBy: {
       date: 'desc',
     },
+    where: NO_LOGIC_DELETED_AT
   });
 }
 
@@ -67,6 +69,28 @@ export async function editEvent(data: {
         date: data.date,
         location: data.location,
         description: data.description,
+      },
+    });
+
+    await ctx.orderDetails.deleteMany({
+      where: {
+        order: {
+          eventID: data.id,
+          id: {
+            notIn: data.orders.filter((o) => o.key.includes('-')).map((order) => order.key),
+          }
+        }
+      },
+    });
+
+    await ctx.order.deleteMany({
+      where: {
+        eventID: data.id,
+        NOT: {
+          id: {
+            in: data.orders.filter((o) => o.key.includes('-')).map((order) => order.key),
+          },
+        },
       },
     });
 
@@ -167,4 +191,16 @@ export async function getEventRecordByID(
       })),
     })),
   };
+}
+
+
+export async function deleteEvent(id: string) {
+  await prisma.event.update({
+    where: {
+      id: id,
+    },
+    data: {
+      deletedAt: new Date(),
+    }
+  });
 }

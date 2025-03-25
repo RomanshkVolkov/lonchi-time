@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useEffect } from 'react';
+import { FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { addToast, Form } from '@heroui/react';
 import { useAtom } from 'jotai';
@@ -26,12 +26,6 @@ export default function FormAppendOrder({
   const { back } = useRouter();
   const [orders, setOrders] = useAtom(orderAtom);
   const order = orders.find((item) => item.key === keyItem);
-
-  useEffect(() => {
-    if (mode === 'edit') {
-      setOrders([]);
-    }
-  }, [mode, setOrders]);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();

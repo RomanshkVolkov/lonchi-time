@@ -44,9 +44,12 @@ model OrderDetails {
 }
 
 model Event {
-  id          String   @id @default(uuid(7)) @db.Uuid
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt
+  deletedAt   DateTime?
+  id          String    @id @default(uuid(7)) @db.Uuid
   name        String
-  date        DateTime @db.Date
+  date        DateTime  @db.Date
   location    String
   description String
   orders      Order[]

@@ -1,6 +1,6 @@
-import { getEventsDataTable } from '@/libs/services/events';
 import MainWrapper from '@/ui/layout/main-wrapper';
-import OrderTable from '@/ui/tables/order-table';
+import EventsTable from '@/ui/tables/events-table';
+import { getEventsDataTable } from '@/libs/services/events';
 
 export default async function Home() {
   const data = await getEventsDataTable();
@@ -16,7 +16,7 @@ export default async function Home() {
         content: 'Agregar evento',
       }}
     >
-      <OrderTable
+      <EventsTable
         data={data.map((item) => ({
           ...item,
           date: item.date.toISOString(),

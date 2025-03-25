@@ -1,14 +1,15 @@
 'use server';
 
+import { redirect } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 import { EventFieldTypes } from '@/types/event';
-import { OrderAtomTypes } from '../atoms/order';
-import { createEvent, editEvent } from '../services/events';
+import { OrderAtomTypes } from '@/libs/atoms/order';
+import { createEvent, deleteEvent, editEvent } from '@/libs/services/events';
 import {
   handleActionError,
   printErrorsOnDevEnv,
-} from '../serializers/error-handler';
-import { redirect } from 'next/navigation';
-import { revalidatePath } from 'next/cache';
+} from '@/libs/serializers/error-handler';
+import { ACTION_SUCCESS_RESPONSE } from '../constants/global';
 
 export async function createEventAction(
   orders: OrderAtomTypes[],
@@ -62,4 +63,16 @@ export async function editEventAction(
   }
   revalidatePath('/');
   redirect('/');
+}
+
+export async function deleteEventAction(
+  id: string,
+) {
+  try {
+    await deleteEvent(id);
+    return ACTION_SUCCESS_RESPONSE;
+  } catch (error) {
+    printErrorsOnDevEnv(error);
+    return handleActionError(error, {});
+  }
 }
