@@ -48,6 +48,7 @@ model Event {
   updatedAt   DateTime  @default(now()) @updatedAt
   deletedAt   DateTime?
   id          String    @id @default(uuid(7)) @db.Uuid
+  cocaPrice   Decimal   @default(50) @db.Decimal(10, 2)
   name        String
   date        DateTime  @db.Date
   location    String

@@ -27,6 +27,7 @@ export async function createEventAction(
       date: new Date(data.date).toISOString(),
       location: data.location,
       description: data.description,
+      cocaPrice: data.cocaPrice,
       orders,
     });
   } catch (error) {
@@ -55,6 +56,7 @@ export async function editEventAction(
       date: new Date(data.date).toISOString(),
       location: data.location,
       description: data.description,
+      cocaPrice: data.cocaPrice,
       orders,
     });
   } catch (error) {

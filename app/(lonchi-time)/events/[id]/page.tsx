@@ -21,12 +21,6 @@ export default async function EventsPage({ params }: Props) {
         { href: '/', label: 'Eventos' },
         { href: `/events/${id}`, label: 'Detalle' },
       ]}
-      createItemButtonProps={{
-        buttonElementProps: {
-          href: `/events/${id}/append-order`,
-        },
-        content: 'Agregar orden',
-      }}
     >
       <EditEventForm event={event} />
     </MainWrapper>

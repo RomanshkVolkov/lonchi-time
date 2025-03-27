@@ -20,6 +20,7 @@
     "@heroicons/react": "^2.2.0",
     "@heroui/react": "^2.7.5",
     "@prisma/client": "^6.5.0",
+    "clsx": "^2.1.1",
     "jotai": "^2.12.2",
     "next": "15.2.3",
     "react": "^19.0.0",

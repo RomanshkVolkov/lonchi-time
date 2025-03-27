@@ -7,12 +7,17 @@ import { EventRecordTypes } from '@/types/event';
 import { NO_LOGIC_DELETED_AT } from '@/prisma/queries';
 
 export async function getEventsDataTable() {
-  return await prisma.event.findMany({
+  const data = await prisma.event.findMany({
     orderBy: {
       date: 'desc',
     },
     where: NO_LOGIC_DELETED_AT
   });
+
+  return data.map((event) => ({
+    ...event,
+    cocaPrice: serializePrice(event.cocaPrice),
+  }))
 }
 
 export async function createEvent(data: {
@@ -20,6 +25,7 @@ export async function createEvent(data: {
   date: string;
   location: string;
   description: string;
+  cocaPrice: string;
   orders: OrderAtomTypes[];
 }) {
   await prisma.$transaction(async (ctx) => {
@@ -29,6 +35,7 @@ export async function createEvent(data: {
         date: data.date,
         location: data.location,
         description: data.description,
+        cocaPrice: +data.cocaPrice || 50,
       },
     });
 
@@ -57,6 +64,7 @@ export async function editEvent(data: {
   date: string;
   location: string;
   description: string;
+  cocaPrice: string;
   orders: OrderAtomTypes[];
 }) {
   await prisma.$transaction(async (ctx) => {
@@ -69,28 +77,7 @@ export async function editEvent(data: {
         date: data.date,
         location: data.location,
         description: data.description,
-      },
-    });
-
-    await ctx.orderDetails.deleteMany({
-      where: {
-        order: {
-          eventID: data.id,
-          id: {
-            notIn: data.orders.filter((o) => o.key.includes('-')).map((order) => order.key),
-          }
-        }
-      },
-    });
-
-    await ctx.order.deleteMany({
-      where: {
-        eventID: data.id,
-        NOT: {
-          id: {
-            in: data.orders.filter((o) => o.key.includes('-')).map((order) => order.key),
-          },
-        },
+        cocaPrice: +data.cocaPrice || 50,
       },
     });
 
@@ -128,17 +115,40 @@ export async function editEvent(data: {
 
       await ctx.orderDetails.deleteMany({
         where: {
-          orderID: order.key,
+          id: {
+            notIn: order.items.filter((item) => item.detailID).map((item) => item.detailID as string)
+          },
+          orderID: order.key
         },
       });
 
-      await ctx.orderDetails.createMany({
-        data: order.items.map((item) => ({
-          orderID: order.key,
-          productID: item.id,
-          quantity: item.amount,
-        })),
-      });
+      for (const item of order.items) {
+        console.log(item)
+        const exist = await ctx.orderDetails.findUnique({
+          where: {
+            id: item.detailID
+          }
+        }).catch(() => false);
+
+        if (!exist) {
+          await ctx.orderDetails.create({
+            data: {
+              orderID: order.key,
+              productID: item.id,
+              quantity: item.amount,
+            }
+          });
+        } else {
+          await ctx.orderDetails.update({
+            where: {
+              id: item.detailID
+            },
+            data: {
+              quantity: item.amount
+            }
+          });
+        }
+      }
     }
   });
 }
@@ -153,6 +163,7 @@ export async function getEventRecordByID(
       date: true,
       location: true,
       description: true,
+      cocaPrice: true,
       orders: {
         select: {
           id: true,
@@ -179,6 +190,7 @@ export async function getEventRecordByID(
 
   return {
     ...data,
+    cocaPrice: data.cocaPrice.toNumber(),
     date: data.date.toISOString(),
     orders: data.orders.map((order) => ({
       ...order,
@@ -203,4 +215,21 @@ export async function deleteEvent(id: string) {
       deletedAt: new Date(),
     }
   });
+}
+
+export async function deleteOrder(orderID: string) {
+  await prisma.$transaction(async (ctx) => {
+
+    await ctx.orderDetails.deleteMany({
+      where: {
+        orderID
+      }
+    })
+
+    await ctx.order.delete({
+      where: {
+        id: orderID
+      }
+    })
+  })
 }

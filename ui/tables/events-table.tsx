@@ -2,11 +2,13 @@
 
 import { useCallback } from 'react';
 import { Event } from '@prisma/client';
-import { TableColumns } from '@/types/common';
+import { SelectOption, TableColumns } from '@/types/common';
 import { safeParseDateString } from '@/libs/utils/intl';
 import DynamicTable from '@/ui/tables/dynamic-table';
-import EditButton from '@/ui/buttons/edit-button';
 import DeleteButton from '../buttons/delete-button';
+import PopoverButtonLinks from '../buttons/popover-button-links';
+import { Button } from '@heroui/react';
+import { PencilSquareIcon } from '@heroicons/react/24/outline';
 
 const columns: TableColumns<Omit<Event, 'date'> & { date: string }>[] = [
   { key: 'name', label: 'Nombre' },
@@ -15,8 +17,9 @@ const columns: TableColumns<Omit<Event, 'date'> & { date: string }>[] = [
 ];
 type Props = {
   data: (Omit<Event, 'date'> & { date: string })[];
+  diners: SelectOption[];
 };
-export default function EventsTable({ data }: Props) {
+export default function EventsTable({ data, diners }: Props) {
   const renderFunciton = useCallback(
     (row: Props['data'][0], columnKey: keyof Event & 'actions') => {
       const cellValue = row[columnKey];
@@ -27,7 +30,17 @@ export default function EventsTable({ data }: Props) {
         case 'actions':
           return (
             <div className="flex justify-center">
-              <EditButton tooltip="Editar evento" href={`/events/${row.id}`} />
+              <PopoverButtonLinks
+                links={diners.map((diner) => ({
+                  label: diner.label,
+                  href: `/events/${row.id}?diner=${diner.key}`,
+                }))}
+                button={
+                  <Button variant="light" isIconOnly>
+                    <PencilSquareIcon className="w-5" />
+                  </Button>
+                }
+              />
               <DeleteButton
                 tooltip="Eliminar evento"
                 href={`/delete-event/${row.id}?name=${encodeURIComponent(row.name)}`}
@@ -38,7 +51,7 @@ export default function EventsTable({ data }: Props) {
           return String(cellValue);
       }
     },
-    [],
+    [diners],
   );
   return (
     <DynamicTable

@@ -8,13 +8,13 @@ import { serializeSelectOptionMapped } from '../serializers/common';
  * @description This section contains the GET methods for the diners service.
  */
 
-export async function getDinnersForInput() {
-   const data = await prisma.diner.findMany();
+export async function getDinersForInput() {
+  const data = await prisma.diner.findMany();
 
-   return serializeSelectOptionMapped({
-      mapped: { key: 'id', label: 'name' },
-      options: data,
-   });
+  return serializeSelectOptionMapped({
+    mapped: { key: 'id', label: 'name' },
+    options: data,
+  });
 }
 
 /**

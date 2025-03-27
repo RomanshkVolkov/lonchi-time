@@ -1,5 +1,6 @@
+import Link from 'next/link';
 import { TrashIcon } from '@heroicons/react/24/outline';
-import { Button, ButtonProps, Link, Tooltip } from '@heroui/react';
+import { Button, ButtonProps, Tooltip } from '@heroui/react';
 
 type Props = {
   tooltip: string;

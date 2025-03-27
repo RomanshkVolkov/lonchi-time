@@ -30,7 +30,7 @@ export default function ModalWrapper({
   children,
   footer,
   hideFooter,
-  isIntercepted,
+  isIntercepted = true,
 }: Props) {
   const { back } = useRouter();
   const { isOpen, onOpenChange } = useDisclosure();
