@@ -17,7 +17,7 @@ export async function getEventsDataTable() {
   return data.map((event) => ({
     ...event,
     cocaPrice: serializePrice(event.cocaPrice),
-  }))
+  }));
 }
 
 export async function createEvent(data: {
@@ -123,7 +123,6 @@ export async function editEvent(data: {
       });
 
       for (const item of order.items) {
-        console.log(item)
         const exist = await ctx.orderDetails.findUnique({
           where: {
             id: item.detailID
@@ -224,12 +223,12 @@ export async function deleteOrder(orderID: string) {
       where: {
         orderID
       }
-    })
+    });
 
     await ctx.order.delete({
       where: {
         id: orderID
       }
-    })
-  })
+    });
+  });
 }

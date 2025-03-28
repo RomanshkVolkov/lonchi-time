@@ -10,18 +10,22 @@ import PopoverButtonLinks from '../buttons/popover-button-links';
 import { Button } from '@heroui/react';
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
 
-const columns: TableColumns<Omit<Event, 'date'> & { date: string }>[] = [
+type DataTableTypes = Omit<Event, 'date' | 'cocaPrice'> & {
+  date: string;
+  cocaPrice: number;
+};
+const columns: TableColumns<DataTableTypes>[] = [
   { key: 'name', label: 'Nombre' },
   { key: 'date', label: 'Fecha' },
   { key: 'actions', label: 'Acciones' },
 ];
 type Props = {
-  data: (Omit<Event, 'date'> & { date: string })[];
+  data: DataTableTypes[];
   diners: SelectOption[];
 };
 export default function EventsTable({ data, diners }: Props) {
   const renderFunciton = useCallback(
-    (row: Props['data'][0], columnKey: keyof Event & 'actions') => {
+    (row: Props['data'][0], columnKey: keyof DataTableTypes & 'actions') => {
       const cellValue = row[columnKey];
 
       switch (columnKey) {

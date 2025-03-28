@@ -24,6 +24,7 @@ export default async function Home() {
         data={data.map((item) => ({
           ...item,
           date: item.date.toISOString(),
+          cocaPrice: item.cocaPrice.value,
         }))}
         diners={diners}
       />
