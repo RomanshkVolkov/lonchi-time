@@ -1,10 +1,10 @@
 'use server';
 
 import prisma from '@/prisma/db';
-import { OrderAtomTypes } from '../atoms/order';
-import { serializePrice } from '../serializers/common';
-import { EventRecordTypes } from '@/types/event';
 import { NO_LOGIC_DELETED_AT } from '@/prisma/queries';
+import { OrderAtomTypes } from '@/libs/atoms/order';
+import { serializePrice } from '@/libs/serializers/common';
+import { EventRecordTypes } from '@/types/event';
 
 export async function getEventsDataTable() {
   const data = await prisma.event.findMany({
@@ -81,6 +81,34 @@ export async function editEvent(data: {
       },
     });
 
+    const ordersRemain = data.orders.map((order) => order.key).filter((key) => key.includes('-'));
+
+    const currentOrders = await ctx.order.findMany({
+      select: {
+        id: true
+      },
+      where: {
+        eventID: data.id,
+      },
+    });
+
+    const ordersToDelete = currentOrders.filter((order) => !ordersRemain.includes(order.id));
+    await ctx.orderDetails.deleteMany({
+      where: {
+        orderID: {
+          in: ordersToDelete.map((order) => order.id),
+        },
+      },
+    });
+
+    await ctx.order.deleteMany({
+      where: {
+        id: {
+          in: ordersToDelete.map((order) => order.id),
+        },
+      },
+    });
+
     for (const order of data.orders) {
       const isNewOrder = !order.key.includes('-');
 
@@ -149,6 +177,7 @@ export async function editEvent(data: {
         }
       }
     }
+
   });
 }
 
@@ -203,7 +232,6 @@ export async function getEventRecordByID(
     })),
   };
 }
-
 
 export async function deleteEvent(id: string) {
   await prisma.event.update({

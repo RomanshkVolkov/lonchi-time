@@ -1,14 +1,15 @@
 'use client';
 
 import { useCallback } from 'react';
+import { Button } from '@heroui/react';
 import { Event } from '@prisma/client';
-import { SelectOption, TableColumns } from '@/types/common';
+import { PencilSquareIcon } from '@heroicons/react/24/outline';
+
 import { safeParseDateString } from '@/libs/utils/intl';
 import DynamicTable from '@/ui/tables/dynamic-table';
-import DeleteButton from '../buttons/delete-button';
-import PopoverButtonLinks from '../buttons/popover-button-links';
-import { Button } from '@heroui/react';
-import { PencilSquareIcon } from '@heroicons/react/24/outline';
+import DeleteButton from '@/ui/buttons/delete-button';
+import PopoverButtonLinks from '@/ui/buttons/popover-button-links';
+import { SelectOption, TableColumns } from '@/types/common';
 
 type DataTableTypes = Omit<Event, 'date' | 'cocaPrice'> & {
   date: string;
