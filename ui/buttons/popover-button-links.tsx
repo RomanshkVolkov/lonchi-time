@@ -16,9 +16,15 @@ export default function PopoverButtonLinks({ links, button }: Props) {
         placement: 'bottom-start',
       }}
     >
-      <ul className="flex w-full flex-col gap-4 p-2">
+      <ul className="flex max-h-[350px] w-full flex-col gap-2 overflow-y-auto p-2">
         {links.map((link) => (
-          <Button key={link.href} as={Link} href={link.href} variant="ghost">
+          <Button
+            key={link.href}
+            as={Link}
+            href={link.href}
+            variant="ghost"
+            size="sm"
+          >
             {link.label}
           </Button>
         ))}
