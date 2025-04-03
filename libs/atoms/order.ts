@@ -12,4 +12,5 @@ export type OrderAtomTypes = {
     amount: number;
   })[];
 };
+
 export const orderAtom = atom<OrderAtomTypes[]>([]);

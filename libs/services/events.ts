@@ -2,7 +2,6 @@
 
 import prisma from '@/prisma/db';
 import { NO_LOGIC_DELETED_AT } from '@/prisma/queries';
-import { OrderAtomTypes } from '@/libs/atoms/order';
 import { serializePrice } from '@/libs/serializers/common';
 import { EventRecordTypes } from '@/types/event';
 
@@ -26,36 +25,17 @@ export async function createEvent(data: {
   location: string;
   description: string;
   cocaPrice: string;
-  orders: OrderAtomTypes[];
 }) {
-  await prisma.$transaction(async (ctx) => {
-    const event = await ctx.event.create({
-      data: {
-        name: data.name,
-        date: data.date,
-        location: data.location,
-        description: data.description,
-        cocaPrice: +data.cocaPrice || 50,
-      },
-    });
-
-    for (const order of data.orders) {
-      const createdOrder = await ctx.order.create({
-        data: {
-          eventID: event.id,
-          dinerID: order.diner.key,
-        },
-      });
-
-      await ctx.orderDetails.createMany({
-        data: order.items.map((item) => ({
-          orderID: createdOrder.id,
-          productID: item.id,
-          quantity: item.amount,
-        })),
-      });
-    }
+  await prisma.event.create({
+    data: {
+      name: data.name,
+      date: data.date,
+      location: data.location,
+      description: data.description,
+      cocaPrice: +data.cocaPrice || 50,
+    },
   });
+
 }
 
 export async function editEvent(data: {
@@ -65,120 +45,20 @@ export async function editEvent(data: {
   location: string;
   description: string;
   cocaPrice: string;
-  orders: OrderAtomTypes[];
 }) {
-  await prisma.$transaction(async (ctx) => {
-    await ctx.event.update({
-      where: {
-        id: data.id,
-      },
-      data: {
-        name: data.name,
-        date: data.date,
-        location: data.location,
-        description: data.description,
-        cocaPrice: +data.cocaPrice || 50,
-      },
-    });
-
-    const ordersRemain = data.orders.map((order) => order.key).filter((key) => key.includes('-'));
-
-    const currentOrders = await ctx.order.findMany({
-      select: {
-        id: true
-      },
-      where: {
-        eventID: data.id,
-      },
-    });
-
-    const ordersToDelete = currentOrders.filter((order) => !ordersRemain.includes(order.id));
-    await ctx.orderDetails.deleteMany({
-      where: {
-        orderID: {
-          in: ordersToDelete.map((order) => order.id),
-        },
-      },
-    });
-
-    await ctx.order.deleteMany({
-      where: {
-        id: {
-          in: ordersToDelete.map((order) => order.id),
-        },
-      },
-    });
-
-    for (const order of data.orders) {
-      const isNewOrder = !order.key.includes('-');
-
-      if (isNewOrder) {
-        const createdOrder = await ctx.order.create({
-          data: {
-            eventID: data.id,
-            dinerID: order.diner.key,
-          },
-        });
-
-        await ctx.orderDetails.createMany({
-          data: order.items.map((item) => ({
-            orderID: createdOrder.id,
-            productID: item.id,
-            quantity: item.amount,
-          })),
-        });
-
-        continue;
-      }
-
-      await ctx.order.update({
-        where: {
-          id: order.key,
-        },
-        data: {
-          dinerID: order.diner.key,
-          hasCoca: order.hasCoca,
-        },
-      });
-
-      await ctx.orderDetails.deleteMany({
-        where: {
-          id: {
-            notIn: order.items.filter((item) => item.detailID).map((item) => item.detailID as string)
-          },
-          orderID: order.key
-        },
-      });
-
-      for (const item of order.items) {
-        const exist = await ctx.orderDetails.findUnique({
-          where: {
-            id: item.detailID
-          }
-        }).catch(() => false);
-
-        if (!exist) {
-          await ctx.orderDetails.create({
-            data: {
-              orderID: order.key,
-              productID: item.id,
-              quantity: item.amount,
-            }
-          });
-        } else {
-          await ctx.orderDetails.update({
-            where: {
-              id: item.detailID
-            },
-            data: {
-              quantity: item.amount
-            }
-          });
-        }
-      }
-    }
-
+  await prisma.event.update({
+    where: {
+      id: data.id,
+    },
+    data: {
+      name: data.name,
+      date: data.date,
+      location: data.location,
+      description: data.description,
+      cocaPrice: +data.cocaPrice || 50,
+    },
   });
+
 }
 
 export async function getEventRecordByID(

@@ -1,6 +1,5 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
 import { OrderAtomTypes } from '@/libs/atoms/order';
 import { serializePrice } from '@/libs/serializers/common';
 import DeleteButton from '@/ui/buttons/delete-button';
@@ -12,7 +11,6 @@ type Props = {
   data: OrderAtomTypes[];
 };
 export default function OrderTable({ data }: Props) {
-  const searchParams = useSearchParams();
   const renderFunction = useCallback(
     (
       row: OrderAtomTypes,
@@ -34,22 +32,15 @@ export default function OrderTable({ data }: Props) {
           );
           return serializePrice(amount).formatted;
         case 'actions':
-          const isDisabled = searchParams.get('diner') !== row.diner.key;
           return (
             <div className="flex justify-center gap-2">
               <EditButton
                 tooltip="Ver detalle"
                 href={`/edit-order/${row.key}`}
-                buttonProps={{
-                  isDisabled,
-                }}
               />
               <DeleteButton
                 tooltip="Eliminar orden"
                 href={`/delete-order/${row.key}`}
-                buttonProps={{
-                  isDisabled,
-                }}
               />
             </div>
           );
@@ -57,8 +48,9 @@ export default function OrderTable({ data }: Props) {
           return String(cellValue);
       }
     },
-    [searchParams],
+    [],
   );
+
   return (
     <div>
       <DynamicTable

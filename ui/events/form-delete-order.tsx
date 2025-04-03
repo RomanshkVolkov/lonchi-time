@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useAtom } from 'jotai';
 import { Button } from '@heroui/react';
 import { orderAtom } from '@/libs/atoms/order';
+import { deleteOrderAction } from '@/libs/actions/orders';
 
 type Props = {
   id: string;
@@ -13,8 +14,10 @@ export default function FormDeleteOrder({ id }: Props) {
   const { back } = useRouter();
   const [_, setAtom] = useAtom(orderAtom);
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     setAtom((prev) => prev.filter((order) => order.id !== id));
+    await deleteOrderAction(id);
+
     back();
   };
 

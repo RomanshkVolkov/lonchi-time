@@ -13,18 +13,21 @@ import { editEventAction } from '@/libs/actions/events';
 import { safeParseDateString } from '@/libs/utils/intl';
 import { EventRecordTypes } from '@/types/event';
 import { serializeEventRecordOrders } from '@/libs/serializers/event';
+import { eventAtom } from '@/libs/atoms/event';
 
 type Props = {
   event: EventRecordTypes;
 };
 export default function EditEventForm({ event }: Props) {
   const [orders, setOrders] = useAtom(orderAtom);
-  const bindAction = editEventAction.bind(null, event.id, orders);
+  const [_, setEvent] = useAtom(eventAtom);
+  const bindAction = editEventAction.bind(null, event.id);
   const [state, action, isLoading] = useActionState(bindAction, undefined);
 
   useEffect(() => {
     setOrders(serializeEventRecordOrders(event.orders));
-  }, [event, setOrders]);
+    setEvent({ id: event.id });
+  }, [event, setOrders, setEvent]);
 
   return (
     <FormWrapper action={action} validationBehavior="native">
@@ -52,6 +55,7 @@ function DetailsSection({
     }
     return Math.floor(isNaN(price) ? 0 : price / dinerHasCoke);
   }, [orders, cocaPrice]);
+
   return (
     <div className="flex w-full flex-col gap-4">
       <FormSection icon={CalendarDaysIcon} title="Información básica">

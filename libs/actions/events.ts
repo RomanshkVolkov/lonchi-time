@@ -3,7 +3,6 @@
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { EventFieldTypes } from '@/types/event';
-import { OrderAtomTypes } from '@/libs/atoms/order';
 import { createEvent, deleteEvent, editEvent } from '@/libs/services/events';
 import {
   handleActionError,
@@ -12,7 +11,6 @@ import {
 import { ACTION_SUCCESS_RESPONSE } from '../constants/global';
 
 export async function createEventAction(
-  orders: OrderAtomTypes[],
   prevState: any,
   formData: FormData,
 ) {
@@ -28,7 +26,6 @@ export async function createEventAction(
       location: data.location,
       description: data.description,
       cocaPrice: data.cocaPrice,
-      orders,
     });
   } catch (error) {
     printErrorsOnDevEnv(error);
@@ -40,7 +37,6 @@ export async function createEventAction(
 
 export async function editEventAction(
   id: string,
-  orders: OrderAtomTypes[],
   prevState: any,
   formData: FormData,
 ) {
@@ -57,7 +53,6 @@ export async function editEventAction(
       location: data.location,
       description: data.description,
       cocaPrice: data.cocaPrice,
-      orders,
     });
   } catch (error) {
     printErrorsOnDevEnv(error);

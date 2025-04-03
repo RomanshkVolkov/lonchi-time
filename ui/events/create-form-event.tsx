@@ -14,8 +14,10 @@ import { stringToCalendarDate } from '@/libs/utils/intl';
 
 export default function CreateEventForm() {
   const [orders] = useAtom(orderAtom);
-  const bindAction = createEventAction.bind(null, orders);
-  const [state, action, isLoading] = useActionState(bindAction, undefined);
+  const [state, action, isLoading] = useActionState(
+    createEventAction,
+    undefined,
+  );
   return (
     <FormWrapper action={action} validationBehavior="native">
       <DetailsSection fields={state?.fields} orders={orders} />

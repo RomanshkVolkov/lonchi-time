@@ -1,13 +1,9 @@
 import MainWrapper from '@/ui/layout/main-wrapper';
 import EventsTable from '@/ui/tables/events-table';
 import { getEventsDataTable } from '@/libs/services/events';
-import { getDinersForInput } from '@/libs/services/diners';
 
 export default async function Home() {
-  const [data, diners] = await Promise.all([
-    getEventsDataTable(),
-    getDinersForInput(),
-  ]);
+  const [data] = await Promise.all([getEventsDataTable()]);
   return (
     <MainWrapper
       headSectionH1Props={{
@@ -26,7 +22,6 @@ export default async function Home() {
           date: item.date.toISOString(),
           cocaPrice: item.cocaPrice.value,
         }))}
-        diners={diners}
       />
     </MainWrapper>
   );
