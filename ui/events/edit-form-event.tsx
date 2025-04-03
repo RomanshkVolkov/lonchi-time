@@ -42,7 +42,7 @@ function DetailsSection({
   orders: OrderAtomTypes[];
 }) {
   const [errors, setErrors] = useState<Record<'cocaPrice', boolean>>({} as any);
-  const [cocaPrice, setCocaPrice] = useState<number>(0);
+  const [cocaPrice, setCocaPrice] = useState<number>(event.cocaPrice);
 
   const valuePerDiner = useCallback(() => {
     const price = cocaPrice;
