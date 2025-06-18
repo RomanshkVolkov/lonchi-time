@@ -5,6 +5,7 @@ import { atom } from 'jotai';
 export type OrderAtomTypes = {
   key: string;
   id?: string;
+  isCollapsed?: boolean
   diner: SelectOption;
   hasCoca: boolean;
   items: (ProductList & {

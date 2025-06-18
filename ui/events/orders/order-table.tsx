@@ -6,6 +6,8 @@ import DeleteButton from '@/ui/buttons/delete-button';
 import EditButton from '@/ui/buttons/edit-button';
 import DynamicTable from '@/ui/tables/dynamic-table';
 import { useCallback } from 'react';
+import DetailsOrderToogle from './details-order-toogle';
+import DynamicTableCollapse from '@/ui/tables/dynamic-table-collapse';
 
 type Props = {
   data: OrderAtomTypes[];
@@ -53,7 +55,7 @@ export default function OrderTable({ data }: Props) {
 
   return (
     <div>
-      <DynamicTable
+      <DynamicTableCollapse
         columns={[
           { key: 'diner', label: 'Nombre' },
           { key: 'hasCoca', label: 'Incluye Coca' },

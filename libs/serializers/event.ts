@@ -7,6 +7,7 @@ export function serializeEventRecordOrders(
   return data.map((order) => ({
     key: order.id,
     id: order.id,
+    isCollapsed: false,
     diner: {
       key: order.diner.id,
       label: order.diner.name,
