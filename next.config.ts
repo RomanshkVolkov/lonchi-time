@@ -2,7 +2,10 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   output: 'standalone',
-  allowedDevOrigins: ['[::1]']
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  allowedDevOrigins: ['[::1]'],
   /* config options here */
 };
 

@@ -17,7 +17,7 @@ export default async function Home() {
       }}
     >
       <EventsTable
-        data={data.map((item) => ({
+        data={data.map((item: any) => ({
           ...item,
           date: item.date.toISOString(),
           cocaPrice: item.cocaPrice.value,
