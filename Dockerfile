@@ -7,7 +7,7 @@ WORKDIR /app
 
 # Install dependencies
 COPY package.json bun.lockb* ./
-RUN bun install --omit dev
+RUN bun install
 
 # Rebuild the source code only when needed
 FROM base AS builder
