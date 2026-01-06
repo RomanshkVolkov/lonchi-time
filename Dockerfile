@@ -7,7 +7,7 @@ WORKDIR /app
 
 # Install dependencies
 COPY package.json bun.lockb* ./
-RUN bun install --frozen-lockfile --production=false
+RUN bun install --omit dev
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -30,7 +30,7 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-RUN addgroup --system --gid 1001 nodejs && \
+RUN addgroup --system --gid 1001 bunuser && \
   adduser --system --uid 1001 nextjs
 
 COPY --from=builder /app/public ./public
@@ -38,8 +38,8 @@ COPY --from=builder /app/public ./public
 # Set the correct permission for prerender cache
 RUN mkdir .next && chown nextjs:nodejs .next
 
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:bunuser /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:bunuser /app/.next/static ./.next/static
 
 USER nextjs
 
