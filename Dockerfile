@@ -29,6 +29,7 @@ FROM base AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
+ENV BUN_ENV=production
 
 RUN addgroup --system --gid 1001 bunuser && \
   adduser --system --uid 1001 nextjs
@@ -36,7 +37,7 @@ RUN addgroup --system --gid 1001 bunuser && \
 COPY --from=builder /app/public ./public
 
 # Set the correct permission for prerender cache
-RUN mkdir .next && chown nextjs:nodejs .next
+RUN mkdir .next && chown nextjs:bunuser .next
 
 COPY --from=builder --chown=nextjs:bunuser /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:bunuser /app/.next/static ./.next/static
