@@ -18,7 +18,7 @@ COPY . .
 ARG DEPLOY_DB_URL
 ENV DATABASE_URL=$DEPLOY_DB_URL
 
-RUN npx prisma generate && npm run build
+RUN npx prisma@6.5.0 generate && npm run build
 
 ENV NODE_ENV=production
 ENV DATABASE_URL="hide"
