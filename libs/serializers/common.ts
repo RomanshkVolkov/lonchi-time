@@ -1,27 +1,25 @@
-import { Prisma } from '@prisma/client';
-
 export function serializeSelectOptionMapped({
-   mapped,
-   options,
+  mapped,
+  options,
 }: {
-   mapped: { key: string; label: string };
-   options: {
-      [key: string]: string;
-   }[];
+  mapped: { key: string; label: string };
+  options: {
+    [key: string]: string;
+  }[];
 }) {
-   return options.map((option) => ({
-      key: option[mapped.key],
-      label: option[mapped.label],
-   }));
+  return options.map((option) => ({
+    key: option[mapped.key],
+    label: option[mapped.label],
+  }));
 }
 
-export function serializePrice(price: number | Prisma.Decimal | null) {
-   const value = typeof price === 'number' ? price : price?.toNumber() ?? 0.0;
-   return {
-      value: value,
-      formatted: new Intl.NumberFormat('es-MX', {
-         style: 'currency',
-         currency: 'MXN',
-      }).format(value),
-   };
+export function serializePrice(price: number | any | null) {
+  const value = typeof price === 'number' ? price : (price?.toNumber() ?? 0.0);
+  return {
+    value: value,
+    formatted: new Intl.NumberFormat('es-MX', {
+      style: 'currency',
+      currency: 'MXN',
+    }).format(value),
+  };
 }
