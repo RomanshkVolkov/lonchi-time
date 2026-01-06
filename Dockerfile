@@ -19,7 +19,7 @@ ARG DEPLOY_DB_URL
 ENV DATABASE_URL=$DEPLOY_DB_URL
 
 # Generate Prisma client and build
-RUN bunx prisma@6.5.0 generate && bun run build
+RUN bunx prisma@6.11.1 generate && bun run build
 
 ENV NODE_ENV=production
 ENV DATABASE_URL="hide"
