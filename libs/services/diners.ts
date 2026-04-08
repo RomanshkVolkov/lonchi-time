@@ -9,7 +9,11 @@ import { serializeSelectOptionMapped } from '../serializers/common';
  */
 
 export async function getDinersForInput() {
-  const data = await prisma.diner.findMany();
+  const data = await prisma.diner.findMany({
+    where: {
+      deletedAt: null,
+    },
+  });
 
   return serializeSelectOptionMapped({
     mapped: { key: 'id', label: 'name' },

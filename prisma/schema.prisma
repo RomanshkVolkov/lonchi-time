@@ -57,7 +57,10 @@ model Event {
 }
 
 model Diner {
-  id     String  @id @default(uuid(7)) @db.Uuid
-  name   String  @unique(map: "UQ_DINER_NAME")
-  orders Order[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
+  deletedAt DateTime?
+  id        String    @id @default(uuid(7)) @db.Uuid
+  name      String    @unique(map: "UQ_DINER_NAME")
+  orders    Order[]
 }

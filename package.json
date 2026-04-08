@@ -11,6 +11,7 @@
     "build:op": "op run --env-file='./.env' -- next build",
     "start": "next start",
     "lint": "next lint",
+    "prisma": "op run --env-file='./.env' -- bunx prisma@6.5.0",
     "prisma:seed": "op run --env-file='./.env' -- npx prisma db seed",
     "prisma:create": "op run --env-file='./.env' -- npx prisma db push",
     "prisma:reset": "op run --env-file='./.env' -- npx prisma migrate reset",
